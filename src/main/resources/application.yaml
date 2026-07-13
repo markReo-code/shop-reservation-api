@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: shop-reservation-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop_reservation
+    username: shopuser
+    password: shop1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
