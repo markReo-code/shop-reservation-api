@@ -19,7 +19,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false, length = 100)
     private String customerName;
 
@@ -52,6 +52,30 @@ public class Reservation {
         this.shopName = shopName;
         this.reservedAt = reservedAt;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public LocalDateTime getReservedAt() {
+        return reservedAt;
+    }
+    
+    public ReservationStatus getStatus() {
+        return status;
     }
     
 }
