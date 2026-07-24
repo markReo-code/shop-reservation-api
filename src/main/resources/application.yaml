@@ -3,9 +3,9 @@ spring:
     name: shop-reservation-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/shop_reservation
-    username: shopuser
-    password: shop1234
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
