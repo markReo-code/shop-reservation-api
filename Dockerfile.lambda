@@ -1,0 +1,52 @@
+# ========================================
+# 1. Spring BootのJARを作成するステージ
+# ========================================
+FROM gradle:9-jdk21 AS builder
+
+WORKDIR /app
+
+# Gradle Wrapper関連のファイルを先にコピー
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+
+RUN chmod +x gradlew
+
+# Javaソースコードをコピー
+COPY src src
+
+# Spring Bootの実行可能JARを作成
+RUN ./gradlew bootJar --no-daemon \
+    && cp "$(find build/libs \
+        -maxdepth 1 \
+        -type f \
+        -name '*.jar' \
+        ! -name '*-plain.jar' \
+        | head -n 1)" /app/app.jar
+
+# ========================================
+# 2. Spring Bootを実行するステージ
+# ========================================
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+# AWS Lambda Web Adapterを追加
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1 \
+    /lambda-adapter \
+    /opt/extensions/lambda-adapter
+
+# Builderステージで作成したJARをコピー
+COPY --from=builder /app/app.jar /app/app.jar
+
+# Spring BootとLambda Web Adapterが使用するポート
+ENV PORT=8080
+ENV AWS_LWA_PORT=8080
+
+# Spring Boot起動確認をTCPで行う
+ENV AWS_LWA_READINESS_CHECK_PROTOCOL=tcp
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
