@@ -172,6 +172,15 @@ curl http://localhost:8080/api/reservations
 http://localhost:8080/api/reservations
 ```
 
+## AWS Lambdaへのデプロイ
+
+Spring Boot APIをDockerイメージとしてビルドし、
+Amazon ECR経由でAWS Lambdaへデプロイします。
+
+詳細は以下を参照してください。
+
+- [Lambdaデプロイ手順](docs/lambda-deployment.md)
+
 ## 補足
 
 本リポジトリはAPI Gatewayを学習するためのバックエンドAPIの一つとして構築しています。
